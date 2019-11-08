@@ -1,0 +1,5 @@
+# GoBang
+> 
+
+## License
+MIT © Ceba
