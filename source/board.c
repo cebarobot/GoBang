@@ -116,19 +116,19 @@ void printBoardCell(int x, int y, int color, bool is_last) {
 // printBoard: print the whole board according to gobang_board
 void printBoard(void) {
     for (int i = BOARD_WIDTH; i >= 1; i--) {
-        printf("%2d", i);
+        printf("\e[47m\e[30m %2d", i);
         for (int j = 1; j <= BOARD_WIDTH; j++) {
             // bool is_last = (i == getLastX() && j == getLastY());
             bool is_last = (gobang_board[i][j].order == getCntPiece());
             printBoardCell(i, j, gobang_board[i][j].color, is_last);
         }
-        printf("\n");
+        printf(" \e[0m\n");
     }
-    printf("  ");
+    printf("\e[47m\e[30m   ");
     for (int j = 1; j <= 15; j ++) {
         printf(" %c", 'A' - 1 + j);
     }
-    printf("\n");
+    printf(" \e[0m\n");
 }
 
 // public
