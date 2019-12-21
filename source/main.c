@@ -34,7 +34,7 @@ int main() {
     int turn_now = BLACK;
     while (1) {
         printf("\n");
-        printf("Step %d:\n", getCntPiece());
+        printf("Step %d:\n", getCntStone());
         printBoard();
 
         printf("\n");
@@ -47,20 +47,22 @@ int main() {
             // human player
             printf("\n");
             while (1) {
-                inputPiece("Please enter the coordinate of the next piece", &next_xx, &next_yy);
-                if (getColor(next_xx, next_yy) == NOPIECE) {
+                inputStone("Please enter the coordinate of the next stone", &next_xx, &next_yy);
+                if (getColor(next_xx, next_yy) == NOSTONE) {
                     break;
                 } else {
-                    printf("There has been a piece at %d%c, ", next_yy + 'A' - 1, next_xx);
+                    printf("There has been a stone at %d%c, ", next_yy + 'A' - 1, next_xx);
                     printf("please choose another place.\n");
                 }
             }
         }
 
         printf("\n");
-        printf("%s placed a piece at %c%d.\n", turn_now == BLACK ? "Black" : "White", next_yy + 'A' - 1, next_xx);
+        printf("%s placed a stone at %c%d.\n", turn_now == BLACK ? "Black" : "White", next_yy + 'A' - 1, next_xx);
 
-        placePiece(next_xx, next_yy, turn_now);
+        placeStone(next_xx, next_yy, turn_now);
+
+        
         
         if (turn_now == BLACK) {
             turn_now = WHITE;
