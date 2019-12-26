@@ -2,6 +2,7 @@
 #define BOARD_WIDTH 15
 #define BOARD_SIZE 225
 
+#define WALL -1
 #define NOSTONE 0
 #define BLACK 1
 #define WHITE 2
@@ -15,6 +16,9 @@ typedef struct boardCell {
 
 // boardInit: initialize the board
 void boardInit(void);
+
+// inBoard: check whether the coordinate is in the board
+int inBoard(int x, int y);
 
 // getCntStone: get the number of men on the board
 int getCntStone(void);

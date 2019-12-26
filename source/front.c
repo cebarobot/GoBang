@@ -17,8 +17,8 @@ int inputYesNo(char * msg_str, int dflt_value) {
             printf("(y/n): ");
         }
 
-        char buff[100];
-        fgets(buff, sizeof(buff), stdin);
+        char buff_str[100];
+        char * buff = fgets(buff_str, sizeof(buff), stdin);
         int len = strlen(buff);
         if (len <= 1) {
             if (dflt_value == YES) {
@@ -40,8 +40,8 @@ int inputYesNo(char * msg_str, int dflt_value) {
 void inputStone(char * msg_str, int * xx, int * yy) {
     while (1) {
         printf("%s: ", msg_str);
-        char buff[100];
-        fgets(buff, sizeof(buff), stdin);
+        char buff_str[100];
+        char * buff = fgets(buff_str, sizeof(buff), stdin);
         int len = strlen(buff);
 
         int flg_x = 0, flg_y = 0;

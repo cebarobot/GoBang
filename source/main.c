@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <string.h>
 
 #include "board.h"
 #include "front.h"
+#include "analysis.h"
 
 #define HUMAN 1
 #define AI 2
@@ -20,8 +22,8 @@ int main() {
         player_role[WHITE] = inputYesNo("Is the second player (white) an AI?", NO) ? AI : HUMAN;
 
         printf("\n");
-        printf("The first player (black) will be %s\n", player_role[BLACK] == HUMAN ? "a hunam" : "an AI");
-        printf("The seconde player (white) will be %s.\n", player_role[WHITE] == HUMAN ? "a hunam" : "an AI");
+        printf("The first player (black) will be %s\n", player_role[BLACK] == HUMAN ? "a human" : "an AI");
+        printf("The seconde player (white) will be %s.\n", player_role[WHITE] == HUMAN ? "a human" : "an AI");
 
         ok_flg = inputYesNo("Are you sure about that?", YES);
     }
@@ -32,10 +34,13 @@ int main() {
     boardInit();
 
     int turn_now = BLACK;
+
+    printf("\n");
+    printf("Step %d:\n", getCntStone());
+    printBoard();
+
     while (1) {
-        printf("\n");
-        printf("Step %d:\n", getCntStone());
-        printBoard();
+
 
         printf("\n");
         printf("%s's turn.\n", turn_now == BLACK? "Black" : "White");
@@ -62,7 +67,35 @@ int main() {
 
         placeStone(next_xx, next_yy, turn_now);
 
+        printf("\n");
+        printf("Step %d:\n", getCntStone());
+        printBoard();
+
+        int analysis_result[MAX_KIND];
+        memset(analysis_result, 0, sizeof(analysis_result));
+        analysisPoint(analysis_result, next_xx, next_yy);
+        printAnalysisResult(analysis_result);
         
+        printf("\n");
+        // check whether the player has Winned
+        if (checkWin(analysis_result, turn_now)) {
+            printf("%s wins and %s loses.\n", turn_now == BLACK? "Black" : "White", turn_now != BLACK? "Black" : "White");
+            break;
+        }
+        // check whether there is a forbidden move
+        if (checkForbiddenMove(analysis_result, turn_now)) {
+            if (inputYesNo("There seems to be a forbidden move, wether to continue?", NO)) {
+                printf("The game continues.\n");
+            } else {
+                printf("The game ended.\n");
+                printf("%s wins and %s loses.\n", turn_now != BLACK? "Black" : "White", turn_now == BLACK? "Black" : "White");
+                break;
+            }
+        }
+
+        printf("\n");
+        printf("Step %d:\n", getCntStone());
+        printBoard();
         
         if (turn_now == BLACK) {
             turn_now = WHITE;

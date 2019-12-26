@@ -24,6 +24,15 @@ void boardInit(void) {
     }
 }
 
+// public 
+// inBoard: check whether the coordinate is in the board
+int inBoard(int x, int y) {
+    if (x < 1 || x > BOARD_WIDTH || y < 1 || y > BOARD_WIDTH) {
+        return 0;
+    }
+    return 1;
+}
+
 // public
 // getCntStone: get the number of men on the board
 int getCntStone(void) {
@@ -33,12 +42,18 @@ int getCntStone(void) {
 // public
 // getColor: get color of stone at (x, y)
 int getColor(int x, int y) {
+    if (!inBoard(x, y)) {
+        return WALL;
+    }
     return gobang_board[x][y].color;
 }
 
 // public
 // getOrder: get order of stone at (x, y)
 int getOrder(int x, int y) {
+    if (!inBoard(x, y)) {
+        return 0;
+    }
     return gobang_board[x][y].order;
 }
 
@@ -134,6 +149,7 @@ void printBoard(void) {
 // public
 // placeStone: place a stone at (x, y) of color
 void placeStone(int x, int y, int color) {
+    // printf("====placeStone=========%c%d.\n", y + 'A' - 1, x);
     if (x < 1 || x > 15 || y < 1 || y > 15) {
         return;
     }

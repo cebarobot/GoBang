@@ -1,6 +1,6 @@
 #### PROJECT SETTINGS ####
 COMPILE_FLAGS = -std=c99 -Wall -Wextra -g -O3
-OBJECTS = main.o board.o front.o
+OBJECTS = main.o board.o front.o analysis.o
 
 #### BUILDING ####
 # Build main program
@@ -9,7 +9,7 @@ gobang: $(OBJECTS)
 	gcc -o gobang $(OBJECTS) $(COMPILE_FLAGS)
 
 # Compile source files
-main.o: main.c board.h front.h
+main.o: main.c board.h front.h analysis.h
 	@echo "Compiling main.o ..."
 	gcc -c main.c $(COMPILE_FLAGS)
 
@@ -20,6 +20,10 @@ front.o :front.c front.h
 board.o: board.c board.h
 	@echo "Compiling board.o ..."
 	gcc -c board.c $(COMPILE_FLAGS)
+
+analysis.o: analysis.c analysis.h
+	@echo "Compiling analysis.o ..."
+	gcc -c analysis.c $(COMPILE_FLAGS)
 
 
 # Clean all build files
