@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
+#include <sys/time.h>
+
 #include "board.h"
 #include "front.h"
 #include "analysis.h"
@@ -72,9 +74,21 @@ int main() {
         printBoard();
 
         int analysis_result[MAX_KIND];
+
+        // // test analysis whole board
+        // struct timeval t_start, t_end;
+        // gettimeofday(&t_start, NULL);
+        // memset(analysis_result, 0, sizeof(analysis_result));
+        // analysisBoard(analysis_result, turn_now);
+        // printAnalysisResult(analysis_result, turn_now);
+        // gettimeofday(&t_end, NULL);
+        // printf("time_start = %ld\n", t_start.tv_sec*1000000 + t_start.tv_usec);
+        // printf("time_end = %ld\n",  t_end.tv_sec*1000000 + t_end.tv_usec);
+        // printf("used time = %ld\n", t_end.tv_sec*1000000 + t_end.tv_usec - (t_start.tv_sec*1000000 + t_start.tv_usec));
+
         memset(analysis_result, 0, sizeof(analysis_result));
         analysisPoint(analysis_result, next_xx, next_yy);
-        printAnalysisResult(analysis_result);
+        // printAnalysisResult(analysis_result);
         
         printf("\n");
         // check whether the player has Winned
@@ -93,10 +107,6 @@ int main() {
             }
         }
 
-        printf("\n");
-        printf("Step %d:\n", getCntStone());
-        printBoard();
-        
         if (turn_now == BLACK) {
             turn_now = WHITE;
         } else {

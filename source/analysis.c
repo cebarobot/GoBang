@@ -11,7 +11,8 @@ const int dy[MAX_FULL_DIR] = { 0,  1,  1,  1,  0, -1, -1, -1};
 
 // public
 // printAnalysisResult: print the array analysis_result
-void printAnalysisResult(int analysis_result[MAX_KIND]) {
+void printAnalysisResult(int analysis_result[MAX_KIND], int role) {
+    printf("----------%s:\n", role == BLACK? "Black" : "White");
     printf("------------------长连：%d\n", analysis_result[LONG]);
     printf("------------------连五：%d\n", analysis_result[FIVE]);
     printf("------------------活四：%d\n", analysis_result[FOUR]);
@@ -782,4 +783,24 @@ int checkForbiddenMove(int analysis_result[MAX_KIND], int role) {
         return 1;
     }
     return 0;
+}
+
+// public
+// analysisBoard: analysis the Board and count the number of stone patterns
+void analysisBoard(int analysis_result[MAX_KIND], int role) {
+    for (int i = 1; i <= BOARD_WIDTH; i++) {
+        for (int j = 1; j <= BOARD_WIDTH; j++) {
+            if (getColor(i, j) == role) {
+                analysisPoint(analysis_result, i, j);
+            }
+        }
+    }
+    analysis_result[LONG] /= 6;
+    analysis_result[FIVE] /= 5;
+    analysis_result[FOUR] /= 4;
+    analysis_result[FOUR_B] /= 4;
+    analysis_result[THREE] /= 3;
+    analysis_result[THREE_B] /= 3;
+    analysis_result[TWO] /= 2;
+    analysis_result[TWO_B] /=2;
 }

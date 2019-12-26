@@ -16,7 +16,7 @@
 
 // public
 // printAnalysisResult: print the array analysis_result
-void printAnalysisResult(int analysis_result[MAX_KIND]);
+void printAnalysisResult(int analysis_result[MAX_KIND], int role);
 
 // // analysisBoard: analysis the whole board and count the number of different kind of stones
 // void analysisBoard(int analysis_result[MAX_KIND], int x, int y);
@@ -31,3 +31,7 @@ int checkWin(int analysis_result[MAX_KIND], int role);
 // checkForbiddenMove: check whether the player make a forbidden move
 // return 0 for ok, 1 for forbidden
 int checkForbiddenMove(int analysis_result[MAX_KIND], int role);
+
+// public
+// analysisBoard: analysis the Board and count the number of stone patterns
+void analysisBoard(int analysis_result[MAX_KIND], int role);
