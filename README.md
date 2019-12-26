@@ -1,6 +1,16 @@
 # GoBang
 > UCAS 本科《程序设计基础（C语言）》课程作业
 
+## 编译说明
+此项目使用 gcc 7.4.0 在 Ubuntu 18.04 环境下编译通过。请在 `source` 文件夹下执行下面的命令来编译程序：
+```bash
+make
+```
+编译完成后，执行下面的命令来启动：
+```bash
+./gobang
+```
+
 ## 知识清单
 * C 语言基础：[*The C Programming Language*](https://en.wikipedia.org/wiki/The_C_Programming_Language)
 * Makefile 编写：[《跟我一起写 Makefile》](http://bbs.chinaunix.net/forum.php?mod=viewthread&tid=408225)
