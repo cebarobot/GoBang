@@ -692,8 +692,10 @@ int checkPatternTwo(int hash_low, int hash_high) {
     return 0;
 }
 
+extern int cnt_analysisPoint;
 // analysisPoint: analysis the number of different kind of stone patterns
 void analysisPoint(int analysis_result[MAX_KIND], int x, int y) {
+    // cnt_analysisPoint++;
     // check color of point
     int role = getColor(x, y);
     if (role <= NOSTONE) {
@@ -815,9 +817,13 @@ int checkForbiddenMove(int analysis_result[MAX_KIND], int role) {
 // public
 // analysisBoard: analysis the Board and count the number of stone patterns
 void analysisBoard(int role, int analysis_result[MAX_KIND], int analysis_result_2[MAX_KIND]) {
-    int role_2 = role == WHITE ? BLACK : WHITE;
+    // printf("~~~~~~~~~~~~~~in\n");
+    int role_2 = roleReverse(role);
     for (int i = 1; i <= BOARD_WIDTH; i++) {
         for (int j = 1; j <= BOARD_WIDTH; j++) {
+            // printf("~~~~~~~~~~");
+            // printCoordinate(i, j);
+            // printf("\n");
             if (getColor(i, j) == role) {
                 analysisPoint(analysis_result, i, j);
             } else if (getColor(i, j) == role_2) {
@@ -825,6 +831,7 @@ void analysisBoard(int role, int analysis_result[MAX_KIND], int analysis_result_
             }
         }
     }
+    // printf("~~~~~~~~~~~~~~out\n");
     analysis_result[LONG] /= 6;
     analysis_result[FIVE] /= 5;
     analysis_result[FOUR] /= 4;
@@ -833,7 +840,7 @@ void analysisBoard(int role, int analysis_result[MAX_KIND], int analysis_result_
     analysis_result[THREE_B] /= 3;
     analysis_result[TWO] /= 2;
     analysis_result[TWO_B] /=2;
-    
+
     analysis_result_2[LONG] /= 6;
     analysis_result_2[FIVE] /= 5;
     analysis_result_2[FOUR] /= 4;

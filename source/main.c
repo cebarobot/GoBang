@@ -13,6 +13,8 @@
 
 int player_role[3];
 
+int cnt_analysisPoint = 0;
+
 int main() {
     printf("Welcome to DeltaBang, a GoBang AI.\n");
     printf("Built by ceba.\n");
@@ -91,7 +93,6 @@ int main() {
         // printf("time_start = %ld\n", t_start.tv_sec*1000000 + t_start.tv_usec);
         // printf("time_end = %ld\n",  t_end.tv_sec*1000000 + t_end.tv_usec);
         // printf("used time = %ld\n", t_end.tv_sec*1000000 + t_end.tv_usec - (t_start.tv_sec*1000000 + t_start.tv_usec));
-
         memset(analysis_result, 0, sizeof(analysis_result));
         analysisPoint(analysis_result, next_xx, next_yy);
         // printf("One point: \n");
@@ -113,6 +114,8 @@ int main() {
                 break;
             }
         }
+
+        printf("====================int cnt_analysisPoint = %d\n", cnt_analysisPoint);
 
         if (turn_now == BLACK) {
             turn_now = WHITE;

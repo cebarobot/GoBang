@@ -24,6 +24,12 @@ void boardInit(void) {
     }
 }
 
+// public 
+// printCoordinate: print formatted coordinate.
+void printCoordinate(int x, int y) {
+    printf("%c%d", y + 'A' - 1, x);
+}
+
 // public
 // roleReverse: reverse the role. Black => White, White => Black
 int roleReverse(int role) {

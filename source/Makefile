@@ -1,6 +1,6 @@
 #### PROJECT SETTINGS ####
-# COMPILE_FLAGS = -std=c99 -Wall -Wextra -O3
-COMPILE_FLAGS = -std=c99 -Wall -Wextra -g
+COMPILE_FLAGS = -std=c99 -Wall -Wextra -O0
+# COMPILE_FLAGS = -std=c99 -Wall -Wextra -g
 OBJECTS = main.o board.o front.o analysis.o ai.o
 
 #### BUILDING ####

@@ -7,19 +7,36 @@
 #include "board.h"
 #include "analysis.h"
 
-#define DFS_MAX_DEPTH 3
+#define DFS_MAX_DEPTH 2
 
-int AIDfs(int depth, int role, int * p_next_xx, int * p_next_yy);
+#define MAX_SCORE 100000000
+
+int AIDfs(int depth, int role, int * p_next_xx, int * p_next_yy, int alpha, int beta);
 int countScore(int analysis_result[MAX_KIND], int analysis_result_2[MAX_KIND]);
 int genSearchSequence(int sequence_x[], int sequence_y[]);
 
 // public
 // AIMain: the main function of ai program
 int AIMain(int role, int * p_next_xx, int * p_next_yy) {
-    int next_xx, next_yy;
-
-    AIDfs(0, role, &next_xx, &next_yy);
-    printf("!!!!!!!\n");
+    int next_xx = 8, next_yy = 8;
+    if (getCntStone() == 1) {
+        time_t t;
+        srand((unsigned) time(&t));
+        do {
+            next_xx = rand() % 3 + 7;
+            next_yy = rand() % 3 + 7;
+        } while (getColor(next_xx, next_yy) != NOSTONE);
+    } else if (getCntStone() == 2) {
+        time_t t;
+        srand((unsigned) time(&t));
+        do {
+            next_xx = rand() % 5 + 6;
+            next_yy = rand() % 5 + 6;
+        } while (getColor(next_xx, next_yy) != NOSTONE);
+    } else if (getCntStone() > 2) {
+        AIDfs(0, role, &next_xx, &next_yy, -MAX_SCORE, MAX_SCORE);
+        printf("!!!!!!!\n");
+    }
 
     // return value s
     *p_next_xx = next_xx;
@@ -28,8 +45,79 @@ int AIMain(int role, int * p_next_xx, int * p_next_yy) {
 }
 
 // private
-// AIDfs: depth first search to 
-int AIDfs(int depth, int role, int * p_next_xx, int * p_next_yy) {
+// AIDfs:
+int AIDfs(int depth, int role, int * p_next_xx, int * p_next_yy, int alpha, int beta) {
+    // printBoard();
+    // if (getCntStone() >=10) {
+    //     printf("=====================depth %d", depth);
+    //     printCoordinate(getLastX(), getLastY());
+    //     printf("\n");
+    // }
+    if (depth >= DFS_MAX_DEPTH) {
+        int analysis_result[MAX_KIND];
+        int analysis_result_2[MAX_KIND];
+        memset(analysis_result, 0, sizeof(analysis_result));
+        memset(analysis_result_2, 0, sizeof(analysis_result_2));
+        // printf("!!!!!!!!!!in!!!!!!!\n");
+        analysisBoard(role, analysis_result, analysis_result_2);
+        // printf("~~~~~~~~out~~~~~~~~~~~~\n");
+        int status_score = countScore(analysis_result, analysis_result_2);
+        // printf("~~~~~~~~awerfqwrf~~~~~~~~~~~~\n");
+
+        return status_score;
+    }
+    int sequence_x[BOARD_SIZE];
+    int sequence_y[BOARD_SIZE];
+    int sequence_cnt = genSearchSequence(sequence_x, sequence_y);
+
+    int mx_score = -MAX_SCORE;
+    int mx_id;
+
+    int role_2 = roleReverse(role);
+    
+    int analysis_result[MAX_KIND];
+
+    for (int i = 0; i < sequence_cnt; i++) {
+        placeStone(sequence_x[i], sequence_y[i], role); 
+
+        memset(analysis_result, 0, sizeof(analysis_result));
+        analysisPoint(analysis_result, sequence_x[i], sequence_y[i]);
+
+
+        if (checkWin(analysis_result, role)) {
+            removeLastStone();
+            mx_score = MAX_SCORE;
+            mx_id = i;
+            break;
+        } else if (checkForbiddenMove(analysis_result, role)) {
+            removeLastStone();
+            continue;
+        } else {
+            int nx, ny;
+            int tmp = -AIDfs(depth + 1, role_2, &nx, &ny, -beta, -alpha);
+            removeLastStone();
+            if (tmp > mx_score) {
+                mx_score = tmp;
+                mx_id = i;
+            }
+            if (mx_score > alpha) {
+                alpha = mx_score;
+            }
+            if (mx_score >= beta) {
+                break;
+            }
+        }
+    }
+    
+    *p_next_xx = sequence_x[mx_id];
+    *p_next_yy = sequence_y[mx_id];
+    return mx_score;
+}
+
+
+// private
+// AIDfsStupid: depth first search but it is too stupid
+int AIDfsStupid(int depth, int role, int * p_next_xx, int * p_next_yy) {
     // printf("==================depth: %d\n", depth);
     int role_2 = roleReverse(role);
     int analysis_result[MAX_KIND];
@@ -60,7 +148,7 @@ int AIDfs(int depth, int role, int * p_next_xx, int * p_next_yy) {
     for (int i = 0; i < sequence_cnt; i++) {
         placeStone(sequence_x[i], sequence_y[i], role); 
         int nx, ny;
-        int tmp = AIDfs(depth + 1, role_2, &nx, &ny);
+        int tmp = AIDfsStupid(depth + 1, role_2, &nx, &ny);
         if (tmp < mn_score || mn_id_cnt == 0) {
             mn_score = tmp;
             mn_id_array[0] = i;
@@ -87,8 +175,8 @@ int genSearchSequence(int sequence_x[], int sequence_y[]) {
     int last_x = getLastX();
     int last_y = getLastY();
 
-    for (int i = -5; i <= 5; i++) {
-        for (int j = -5; j <= 5; j++) {
+    for (int i = -3; i <= 3; i++) {
+        for (int j = -3; j <= 3; j++) {
             if (getColor(last_x + i, last_y +j) == NOSTONE) {
                 sequence_x[cnt] = last_x + i;
                 sequence_y[cnt] = last_y + j;

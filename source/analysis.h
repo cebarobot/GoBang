@@ -2,7 +2,7 @@
 #define __ANALYSIS__
 
 // kinds of stones
-#define MAX_KIND 12
+#define MAX_KIND 13
 
 #define LONG        1   // 长连
 #define FIVE        2   // 连五
