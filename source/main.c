@@ -6,6 +6,7 @@
 #include "board.h"
 #include "front.h"
 #include "analysis.h"
+#include "ai.h"
 
 #define HUMAN 1
 #define AI 2
@@ -49,7 +50,9 @@ int main() {
 
         int next_xx, next_yy;
         if(player_role[turn_now] == AI) {
-
+            // TODO:
+            // AI player
+            AIMainStupid(&next_xx, &next_yy);
         } else {
             // human player
             printf("\n");
@@ -113,5 +116,6 @@ int main() {
             turn_now = BLACK;
         }
     }
+    while(!inputYesNo("Ready to quit?", NO));
     return 0;
 }

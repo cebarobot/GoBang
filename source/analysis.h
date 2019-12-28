@@ -1,3 +1,6 @@
+#ifndef __ANALYSIS__
+#define __ANALYSIS__
+
 // kinds of stones
 #define MAX_KIND 9
 
@@ -13,6 +16,9 @@
 // directions
 #define MAX_FULL_DIR 8
 #define MAX_DIR 4
+
+extern const int dx[MAX_FULL_DIR];
+extern const int dy[MAX_FULL_DIR];
 
 // public
 // printAnalysisResult: print the array analysis_result
@@ -35,3 +41,5 @@ int checkForbiddenMove(int analysis_result[MAX_KIND], int role);
 // public
 // analysisBoard: analysis the Board and count the number of stone patterns
 void analysisBoard(int analysis_result[MAX_KIND], int role);
+
+#endif

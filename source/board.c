@@ -60,12 +60,18 @@ int getOrder(int x, int y) {
 // public
 // getLastX: get the x of last stone
 int getLastX(void) {
+    if (cnt_stone == 0) {
+        return -1;
+    }
     return order_of_stone[cnt_stone].x;
 }
 
 // public
 // getLastY: get the y of last stone
 int getLastY(void) {
+    if (cnt_stone == 0) {
+        return -1;
+    }
     return order_of_stone[cnt_stone].y;
 }
 

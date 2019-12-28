@@ -1,3 +1,6 @@
+#ifndef __BOARD__
+#define __BOARD__
+
 // Constant
 #define BOARD_WIDTH 15
 #define BOARD_SIZE 225
@@ -46,3 +49,5 @@ void placeStone(int x, int y, int color);
 
 // removeLastStone: remove the last stone on the board
 void removeLastStone(void);
+
+#endif
