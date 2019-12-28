@@ -1,5 +1,6 @@
 #### PROJECT SETTINGS ####
-COMPILE_FLAGS = -std=c99 -Wall -Wextra -g -O3
+# COMPILE_FLAGS = -std=c99 -Wall -Wextra -O3
+COMPILE_FLAGS = -std=c99 -Wall -Wextra -g
 OBJECTS = main.o board.o front.o analysis.o ai.o
 
 #### BUILDING ####
@@ -21,11 +22,11 @@ board.o: board.c board.h
 	@echo "Compiling board.o ..."
 	gcc -c board.c $(COMPILE_FLAGS)
 
-analysis.o: analysis.c analysis.h
+analysis.o: analysis.c analysis.h board.h
 	@echo "Compiling analysis.o ..."
 	gcc -c analysis.c $(COMPILE_FLAGS)
 
-ai.o: ai.c ai.h
+ai.o: ai.c ai.h board.h analysis.h
 	@echo "Compiling ai.o ..."
 	gcc -c ai.c $(COMPILE_FLAGS)
 

@@ -24,6 +24,17 @@ void boardInit(void) {
     }
 }
 
+// public
+// roleReverse: reverse the role. Black => White, White => Black
+int roleReverse(int role) {
+    if (role == WHITE) {
+        return BLACK;
+    } else if (role == BLACK) {
+        return WHITE;
+    }
+    return role;
+}
+
 // public 
 // inBoard: check whether the coordinate is in the board
 int inBoard(int x, int y) {

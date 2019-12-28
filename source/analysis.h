@@ -2,16 +2,19 @@
 #define __ANALYSIS__
 
 // kinds of stones
-#define MAX_KIND 9
+#define MAX_KIND 12
 
-#define LONG    1   // 长连
-#define FIVE    2   // 连五
-#define FOUR    3   // 活四
-#define FOUR_B  4   // 冲四
-#define THREE   5   // 活三
-#define THREE_B 6   // 眠三
-#define TWO     7   // 活二
-#define TWO_B   8   // 眠二
+#define LONG        1   // 长连
+#define FIVE        2   // 连五
+#define FOUR        3   // 活四
+#define FOUR_B      4   // 冲四
+#define THREE       5   // 活三
+#define THREE_B     6   // 眠三
+#define TWO         7   // 活二
+#define TWO_B       8   // 眠二
+#define FOUR_D      9   // 双四
+#define FOUR_THREE  10  // 四-三
+#define THREE_D     11  // 双活三
 
 // directions
 #define MAX_FULL_DIR 8
@@ -23,9 +26,6 @@ extern const int dy[MAX_FULL_DIR];
 // public
 // printAnalysisResult: print the array analysis_result
 void printAnalysisResult(int analysis_result[MAX_KIND], int role);
-
-// // analysisBoard: analysis the whole board and count the number of different kind of stones
-// void analysisBoard(int analysis_result[MAX_KIND], int x, int y);
 
 // analysisPoint: analysis the number of different kind of stone patterns
 void analysisPoint(int analysis_result[MAX_KIND], int x, int y);
@@ -40,6 +40,6 @@ int checkForbiddenMove(int analysis_result[MAX_KIND], int role);
 
 // public
 // analysisBoard: analysis the Board and count the number of stone patterns
-void analysisBoard(int analysis_result[MAX_KIND], int role);
+void analysisBoard(int role, int analysis_result[MAX_KIND], int analysis_result_2[MAX_KIND]);
 
 #endif

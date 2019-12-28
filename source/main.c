@@ -52,7 +52,7 @@ int main() {
         if(player_role[turn_now] == AI) {
             // TODO:
             // AI player
-            AIMainStupid(&next_xx, &next_yy);
+            AIMain(turn_now, &next_xx, &next_yy);
         } else {
             // human player
             printf("\n");
@@ -77,13 +77,16 @@ int main() {
         printBoard();
 
         int analysis_result[MAX_KIND];
+        // int analysis_result_2[MAX_KIND];
 
         // // test analysis whole board
         // struct timeval t_start, t_end;
         // gettimeofday(&t_start, NULL);
         // memset(analysis_result, 0, sizeof(analysis_result));
-        // analysisBoard(analysis_result, turn_now);
+        // memset(analysis_result_2, 0, sizeof(analysis_result_2));
+        // analysisBoard(turn_now, analysis_result, analysis_result_2);
         // printAnalysisResult(analysis_result, turn_now);
+        // printAnalysisResult(analysis_result_2, turn_now == WHITE? BLACK : WHITE);
         // gettimeofday(&t_end, NULL);
         // printf("time_start = %ld\n", t_start.tv_sec*1000000 + t_start.tv_usec);
         // printf("time_end = %ld\n",  t_end.tv_sec*1000000 + t_end.tv_usec);
@@ -91,7 +94,8 @@ int main() {
 
         memset(analysis_result, 0, sizeof(analysis_result));
         analysisPoint(analysis_result, next_xx, next_yy);
-        // printAnalysisResult(analysis_result);
+        // printf("One point: \n");
+        // printAnalysisResult(analysis_result, turn_now);
         
         printf("\n");
         // check whether the player has Winned

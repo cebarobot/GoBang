@@ -1,17 +1,25 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <time.h>
 
 #include "ai.h"
 #include "board.h"
 #include "analysis.h"
 
+#define DFS_MAX_DEPTH 3
+
+int AIDfs(int depth, int role, int * p_next_xx, int * p_next_yy);
+int countScore(int analysis_result[MAX_KIND], int analysis_result_2[MAX_KIND]);
+int genSearchSequence(int sequence_x[], int sequence_y[]);
+
+// public
 // AIMain: the main function of ai program
-int AIMain(int * p_next_xx, int * p_next_yy) {
+int AIMain(int role, int * p_next_xx, int * p_next_yy) {
     int next_xx, next_yy;
 
-    next_xx = 1;
-    next_yy = 1;
+    AIDfs(0, role, &next_xx, &next_yy);
+    printf("!!!!!!!\n");
 
     // return value s
     *p_next_xx = next_xx;
@@ -19,6 +27,110 @@ int AIMain(int * p_next_xx, int * p_next_yy) {
     return 0;
 }
 
+// private
+// AIDfs: depth first search to 
+int AIDfs(int depth, int role, int * p_next_xx, int * p_next_yy) {
+    // printf("==================depth: %d\n", depth);
+    int role_2 = roleReverse(role);
+    int analysis_result[MAX_KIND];
+    int analysis_result_2[MAX_KIND];
+    int point_analysis_result[MAX_KIND];
+    memset(analysis_result, 0, sizeof(analysis_result));
+    memset(analysis_result_2, 0, sizeof(analysis_result_2));
+    memset(point_analysis_result, 0, sizeof(point_analysis_result));
+
+    analysisBoard(role, analysis_result, analysis_result_2);
+
+    int status_score = countScore(analysis_result, analysis_result_2);
+
+    if (depth >= DFS_MAX_DEPTH) {
+        return status_score;
+    }
+
+    int sequence_x[BOARD_SIZE];
+    int sequence_y[BOARD_SIZE];
+    int sequence_cnt = genSearchSequence(sequence_x, sequence_y);
+
+    int mn_id_array[BOARD_SIZE];
+    int mn_score = 0;
+    int mn_id_cnt = 0;
+
+    // int score_map[BOARD_WIDTH + 1][BOARD_WIDTH + 1];
+
+    for (int i = 0; i < sequence_cnt; i++) {
+        placeStone(sequence_x[i], sequence_y[i], role); 
+        int nx, ny;
+        int tmp = AIDfs(depth + 1, role_2, &nx, &ny);
+        if (tmp < mn_score || mn_id_cnt == 0) {
+            mn_score = tmp;
+            mn_id_array[0] = i;
+            mn_id_cnt = 1;
+        } else if (tmp == mn_score) {
+            mn_id_array[mn_id_cnt++] = i;
+        }
+
+        removeLastStone();
+    }
+
+    // printf("sequence_cnt : %d\n", sequence_cnt);
+    
+    *p_next_xx = sequence_x[mn_id_array[0]];
+    *p_next_yy = sequence_y[mn_id_array[0]];
+    // printf("!!!!!!!\n");
+    return 0 - mn_score;
+}
+
+// private
+// genSearchSequence: generate search sequence of points.
+int genSearchSequence(int sequence_x[], int sequence_y[]) {
+    int cnt = 0;
+    int last_x = getLastX();
+    int last_y = getLastY();
+
+    for (int i = -5; i <= 5; i++) {
+        for (int j = -5; j <= 5; j++) {
+            if (getColor(last_x + i, last_y +j) == NOSTONE) {
+                sequence_x[cnt] = last_x + i;
+                sequence_y[cnt] = last_y + j;
+                cnt ++;
+            }
+        }
+    }
+
+    return cnt;
+}
+
+// private
+// countScore: count the score of the current board. the current player has advantage.
+int countScore(int analysis_result[MAX_KIND], int analysis_result_2[MAX_KIND]) {
+    int score = 0;
+    int score_2 = 0;
+    score += analysis_result[TWO]           * 100;
+    score += analysis_result[THREE_B]       * 100;
+    score += analysis_result[THREE]         * 10000;
+    score += analysis_result[FOUR_B]        * 10000;
+    score += analysis_result[FOUR]          * 1000000;
+    score += analysis_result[THREE_D]       * 1000000;
+    score += analysis_result[FOUR_THREE]    * 1000000;
+    score += analysis_result[FOUR_D]        * 1000000;
+    score += analysis_result[FIVE]          * 10000000;
+
+    score_2 += analysis_result_2[TWO]           * 100;
+    score_2 += analysis_result_2[THREE_B]       * 100;
+    score_2 += analysis_result_2[THREE]         * 10000;
+    score_2 += analysis_result_2[FOUR_B]        * 10000;
+    score_2 += analysis_result_2[FOUR]          * 1000000;
+    score_2 += analysis_result_2[THREE_D]       * 1000000;
+    score_2 += analysis_result_2[FOUR_THREE]    * 1000000;
+    score_2 += analysis_result_2[FOUR_D]        * 1000000;
+    score_2 += analysis_result_2[FIVE]          * 10000000;
+
+    return score - score_2;
+}
+
+
+
+// AIMainRandom: This ai placed a stone randomly.
 int AIMainRandom(int * p_next_xx, int * p_next_yy) {
     int next_xx, next_yy;
 
@@ -37,6 +149,7 @@ int AIMainRandom(int * p_next_xx, int * p_next_yy) {
     return 0;
 }
 
+// AIMainStupid: This ai placed a stone near the last stone.
 int AIMainStupid(int * p_next_xx, int * p_next_yy) {
     int next_xx, next_yy;
     int last_xx = getLastX();

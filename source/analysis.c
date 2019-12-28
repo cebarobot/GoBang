@@ -21,6 +21,9 @@ void printAnalysisResult(int analysis_result[MAX_KIND], int role) {
     printf("------------------眠三：%d\n", analysis_result[THREE_B]);
     printf("------------------活二：%d\n", analysis_result[TWO]);
     printf("------------------眠二：%d\n", analysis_result[TWO_B]);
+    printf("------------------双四：%d\n", analysis_result[FOUR_D]);
+    printf("------------------四三：%d\n", analysis_result[FOUR_THREE]);
+    printf("------------------双三：%d\n", analysis_result[THREE_D]);
 }
 
 
@@ -707,28 +710,37 @@ void analysisPoint(int analysis_result[MAX_KIND], int x, int y) {
         // printf("----------hash_dir[%d] = %u\n", i, hash_dir[i]);
     }
 
+    // some flags
+    int flag_4 = 0;     // flag of 四
+    int flag_3 = 0;     // flag of 活三
+
     // count the number of all stone partten
     for (int i = 0; i < MAX_DIR; i++) {
         // 长连
-        analysis_result[LONG] += checkPatternLong(hash_dir[i], hash_dir[i + 4]);
-        if (analysis_result[LONG] > 0) {
+        int tmp_long = checkPatternLong(hash_dir[i], hash_dir[i + 4]);
+        if (tmp_long > 0) {
+            analysis_result[LONG] += 1;
             continue;
         }
         // 连五
-        analysis_result[FIVE] += checkPatternFive(hash_dir[i], hash_dir[i + 4]);
-        if (analysis_result[FIVE] > 0) {
+        int tmp_5 = checkPatternFive(hash_dir[i], hash_dir[i + 4]);
+        if (tmp_5 > 0) {
+            analysis_result[FIVE] += 1;
             continue;
         }
         // 四
         int tmp_4 = checkPatternFour(x, y, i, hash_dir[i], hash_dir[i + 4]);
         if (tmp_4 == 1) {
             analysis_result[FOUR_B] += 1;
+            flag_4 += 1;
             continue;
         } else if (tmp_4 == 2) {
             analysis_result[FOUR] += 1;
+            flag_4 += 1;
             continue;
         } else if (tmp_4 == 3) {
             analysis_result[FOUR_B] += 2;
+            flag_4 += 2;
             continue;
         }
 
@@ -739,6 +751,7 @@ void analysisPoint(int analysis_result[MAX_KIND], int x, int y) {
             continue;
         } else if (tmp_3 == 2) {
             analysis_result[THREE] += 1;
+            flag_3 += 1;
             continue;
         }
 
@@ -752,6 +765,20 @@ void analysisPoint(int analysis_result[MAX_KIND], int x, int y) {
             analysis_result[TWO] += 1;
             continue;
         }
+    }
+
+    // count combined patterns
+    // 双四
+    if (flag_4 >= 2) {
+        analysis_result[FOUR_D] += 1;
+    }
+    // 四三
+    if (flag_4 >= 1 && flag_3 >= 1) {
+        analysis_result[FOUR_THREE] += 1;
+    }
+    // 双三
+    if (flag_3 >= 2) {
+        analysis_result[THREE_D] += 1;
     }
 }
 
@@ -776,10 +803,10 @@ int checkForbiddenMove(int analysis_result[MAX_KIND], int role) {
     if (analysis_result[LONG]) {
         return 1;
     }
-    if (analysis_result[FOUR] + analysis_result[FOUR_B] >= 2) {
+    if (analysis_result[FOUR_D]) {
         return 1;
     }
-    if (analysis_result[THREE] >= 2) {
+    if (analysis_result[THREE_D]) {
         return 1;
     }
     return 0;
@@ -787,11 +814,14 @@ int checkForbiddenMove(int analysis_result[MAX_KIND], int role) {
 
 // public
 // analysisBoard: analysis the Board and count the number of stone patterns
-void analysisBoard(int analysis_result[MAX_KIND], int role) {
+void analysisBoard(int role, int analysis_result[MAX_KIND], int analysis_result_2[MAX_KIND]) {
+    int role_2 = role == WHITE ? BLACK : WHITE;
     for (int i = 1; i <= BOARD_WIDTH; i++) {
         for (int j = 1; j <= BOARD_WIDTH; j++) {
             if (getColor(i, j) == role) {
                 analysisPoint(analysis_result, i, j);
+            } else if (getColor(i, j) == role_2) {
+                analysisPoint(analysis_result_2, i, j);
             }
         }
     }
@@ -803,4 +833,13 @@ void analysisBoard(int analysis_result[MAX_KIND], int role) {
     analysis_result[THREE_B] /= 3;
     analysis_result[TWO] /= 2;
     analysis_result[TWO_B] /=2;
+    
+    analysis_result_2[LONG] /= 6;
+    analysis_result_2[FIVE] /= 5;
+    analysis_result_2[FOUR] /= 4;
+    analysis_result_2[FOUR_B] /= 4;
+    analysis_result_2[THREE] /= 3;
+    analysis_result_2[THREE_B] /= 3;
+    analysis_result_2[TWO] /= 2;
+    analysis_result_2[TWO_B] /=2;
 }

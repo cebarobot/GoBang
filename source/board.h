@@ -20,6 +20,9 @@ typedef struct boardCell {
 // boardInit: initialize the board
 void boardInit(void);
 
+// roleReverse: reverse the role. Black => White, White => Black
+int roleReverse(int role);
+
 // inBoard: check whether the coordinate is in the board
 int inBoard(int x, int y);
 
