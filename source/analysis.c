@@ -142,13 +142,18 @@ int checkPatternFive(int hash_low, int hash_high) {
 // checkPatternFour: check pattern of four
 // return 0 for no four, 1 for 1 FOUR_B, 2 for FOUR, 3 for double FOUR_B
 int checkPatternFour(int x, int y, int dir, int hash_low, int hash_high) {
+    int role = getColor(x, y);
+    if (role == WALL) {
+        printf("\e[43m\e[30m error - getColor: not in board\e[0m");
+        return 0;
+    }
     // a****b
     // a|*|***b
     if (hash_low % (1 << 2) == 1 && hash_high % (1 << 8) == 85) {
         int tmp = 0;
-        tmp += tryMove(x + dx[dir], y + dy[dir], getColor(x, y));
+        tmp += tryMove(x + dx[dir], y + dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
-        tmp += tryMove(x + 4 * dx[dir + 4], y + 4 * dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + 4 * dx[dir + 4], y + 4 * dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
@@ -156,10 +161,10 @@ int checkPatternFour(int x, int y, int dir, int hash_low, int hash_high) {
     if (hash_low % (1 << 4) == 5 && hash_high % (1 << 6) == 21) {
         int tmp = 0;
         // try a
-        tmp += tryMove(x + 2 * dx[dir], y + 2 * dy[dir], getColor(x, y));
+        tmp += tryMove(x + 2 * dx[dir], y + 2 * dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
         // try b
-        tmp += tryMove(x + 3 * dx[dir + 4], y + 3 * dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + 3 * dx[dir + 4], y + 3 * dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
@@ -167,19 +172,19 @@ int checkPatternFour(int x, int y, int dir, int hash_low, int hash_high) {
     if (hash_low % (1 << 6) == 21 && hash_high % (1 << 4) == 5) {
         int tmp = 0;
         // try a
-        tmp += tryMove(x + 3 * dx[dir], y + 3 * dy[dir], getColor(x, y));
+        tmp += tryMove(x + 3 * dx[dir], y + 3 * dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
         // try b
-        tmp += tryMove(x + 2 * dx[dir + 4], y + 2 * dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + 2 * dx[dir + 4], y + 2 * dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // a***|*|b
     if (hash_low % (1 << 8) == 85 && hash_high % (1 << 2) == 1) {
         int tmp = 0;
-        tmp += tryMove(x + 4 * dx[dir], y + 4 * dy[dir], getColor(x, y));
+        tmp += tryMove(x + 4 * dx[dir], y + 4 * dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
-        tmp += tryMove(x + dx[dir + 4], y + dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + dx[dir + 4], y + dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
@@ -188,28 +193,28 @@ int checkPatternFour(int x, int y, int dir, int hash_low, int hash_high) {
     // |*|**a*
     if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 469) {
         int tmp = 0;
-        tmp += tryMove(x + 3 * dx[dir + 4], y + 3 * dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + 3 * dx[dir + 4], y + 3 * dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // *|*|*a*
     if (hash_low % (1 << 4) == 5 && hash_high % (1 << 8) == 117) {
         int tmp = 0;
-        tmp += tryMove(x + 2 * dx[dir + 4], y + 2 * dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + 2 * dx[dir + 4], y + 2 * dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // **|*|a*
     if (hash_low % (1 << 6) == 21 && hash_high % (1 << 6) == 29) {
         int tmp = 0;
-        tmp += tryMove(x + dx[dir + 4], y + dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + dx[dir + 4], y + dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // ***a|*|
     if (hash_low % (1 << 10) == 349 && hash_high % (1 << 2) == 1) {
         int tmp = 0;
-        tmp += tryMove(x + dx[dir], y + dy[dir], getColor(x, y));
+        tmp += tryMove(x + dx[dir], y + dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
@@ -218,28 +223,28 @@ int checkPatternFour(int x, int y, int dir, int hash_low, int hash_high) {
     // |*|a***
     if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 349) {
         int tmp = 0;
-        tmp += tryMove(x + dx[dir + 4], y + dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + dx[dir + 4], y + dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // *a|*|**
     if (hash_low % (1 << 6) == 29 && hash_high % (1 << 6) == 21) {
         int tmp = 0;
-        tmp += tryMove(x + dx[dir], y + dy[dir], getColor(x, y));
+        tmp += tryMove(x + dx[dir], y + dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // *a*|*|*
     if (hash_low % (1 << 8) == 117 && hash_high % (1 << 4) == 5) {
         int tmp = 0;
-        tmp += tryMove(x + 2 * dx[dir], y + 2 * dy[dir], getColor(x, y));
+        tmp += tryMove(x + 2 * dx[dir], y + 2 * dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // *a**|*|
     if (hash_low % (1 << 10) == 469 && hash_high % (1 << 2) == 1) {
         int tmp = 0;
-        tmp += tryMove(x + 3 * dx[dir], y + 3 * dy[dir], getColor(x, y));
+        tmp += tryMove(x + 3 * dx[dir], y + 3 * dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
@@ -248,28 +253,28 @@ int checkPatternFour(int x, int y, int dir, int hash_low, int hash_high) {
     // |*|*a**
     if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 373) {
         int tmp = 0;
-        tmp += tryMove(x + 2 * dx[dir + 4], y + 2 * dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + 2 * dx[dir + 4], y + 2 * dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // *|*|a**
     if (hash_low % (1 << 4) == 5 && hash_high % (1 << 8) == 93) {
         int tmp = 0;
-        tmp += tryMove(x + dx[dir + 4], y + dy[dir + 4], getColor(x, y));
+        tmp += tryMove(x + dx[dir + 4], y + dy[dir + 4], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // **a|*|*
     if (hash_low % (1 << 8) == 93 && hash_high % (1 << 4) == 5) {
         int tmp = 0;
-        tmp += tryMove(x + dx[dir], y + dy[dir], getColor(x, y));
+        tmp += tryMove(x + dx[dir], y + dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
     // **a*|*|
     if (hash_low % (1 << 10) == 373 && hash_high % (1 << 2) == 1) {
         int tmp = 0;
-        tmp += tryMove(x + 2 * dx[dir], y + 2 * dy[dir], getColor(x, y));
+        tmp += tryMove(x + 2 * dx[dir], y + 2 * dy[dir], role);
         // printf("-----tmp::::::%d\n", tmp);
         return tmp;
     }
@@ -303,6 +308,267 @@ int tryMakeMoveFour(int nx, int ny, int dir, int role) {
 // return 0 for no three, 1 for 1 THREE_B, 2 for THREE, 3 for double THREE_B
 int checkPatternThree(int x, int y, int dir, int hash_low, int hash_high) {
     int role = getColor(x, y);
+    if (role == WALL) {
+        printf("\e[43m\e[30m error - getColor: not in board\e[0m");
+        return 0;
+    }
+    // b?***a?c
+    // b?x**a?c
+    if ((hash_low % (1 << 6) == 13 || hash_low % (1 << 6) == 61)
+        && (hash_high % (1 << 12) == 981 || hash_high % (1 << 12) == 4053)) {
+        int tmp = tryMove(x + 3 * dx[dir + 4], y + 3 * dy[dir + 4], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+    // b?*x*a?c
+    if ((hash_low % (1 << 8) == 53 || hash_low % (1 << 8) == 245)
+        && (hash_high % (1 << 10) == 245 || hash_high % (1 << 10) == 1013)) {
+        int tmp = tryMove(x + 2 * dx[dir + 4], y + 2 * dy[dir + 4], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+    // b?**xa?c
+    if ((hash_low % (1 << 10) == 213 || hash_low % (1 << 10) == 981)
+        && (hash_high % (1 << 8) == 61 || hash_high % (1 << 8) == 253)) {
+        int tmp = tryMove(x + dx[dir + 4], y + dy[dir + 4], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+
+    // c?a***?b
+    // c?a**x?b
+    if ((hash_high % (1 << 6) == 13 || hash_high % (1 << 6) == 61)
+        && (hash_low % (1 << 12) == 981 || hash_low % (1 << 12) == 4053)) {
+        int tmp = tryMove(x + 3 * dx[dir], y + 3 * dy[dir], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+    // c?a*x*?b
+    if ((hash_high % (1 << 8) == 53 || hash_high % (1 << 8) == 245)
+        && (hash_low % (1 << 10) == 245 || hash_low % (1 << 10) == 1013)) {
+        int tmp = tryMove(x + 2 * dx[dir], y + 2 * dy[dir], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+    // c?ax**?b
+    if ((hash_high % (1 << 10) == 213 || hash_high % (1 << 10) == 981)
+        && (hash_low % (1 << 8) == 61 || hash_low % (1 << 8) == 253)) {
+        int tmp = tryMove(x + dx[dir], y + dy[dir], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+
+    // b?**a*?c
+    // b?x*a*?c
+    if ((hash_low % (1 << 6) == 13 || hash_low % (1 << 6) == 61)
+        && (hash_high % (1 << 12) == 885 || hash_high % (1 << 12) == 3957)) {
+        int tmp = tryMove(x + 2 * dx[dir + 4], y + 2 * dy[dir + 4], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+    // b?*xa*?c
+    if ((hash_low % (1 << 8) == 53 || hash_low % (1 << 8) == 245)
+        && (hash_high % (1 << 10) == 221 || hash_high % (1 << 10) == 989)) {
+        int tmp = tryMove(x + dx[dir + 4], y + dy[dir + 4], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+    // b?**ax?c
+    if ((hash_low % (1 << 12) == 861 || hash_low % (1 << 12) == 3933)
+        && (hash_high % (1 << 6) == 13 || hash_high % (1 << 6) == 61)) {
+        int tmp = tryMove(x - dx[dir + 4], y - dy[dir + 4], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+
+    // c?*a**?b
+    // c?*a*x?b - b?x*a*?c
+    if ((hash_high % (1 << 6) == 13 || hash_high % (1 << 6) == 61)
+        && (hash_low % (1 << 12) == 885 || hash_low % (1 << 12) == 3957)) {
+        int tmp = tryMove(x + 2 * dx[dir], y + 2 * dy[dir], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+    // c?*ax*?b - b?*xa*?c
+    if ((hash_high % (1 << 8) == 53 || hash_high % (1 << 8) == 245)
+        && (hash_low % (1 << 10) == 221 || hash_low % (1 << 10) == 989)) {
+        int tmp = tryMove(x + dx[dir], y + dy[dir], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+    // c?xa**?b - b?**ax?c
+    if ((hash_high % (1 << 12) == 861 || hash_high % (1 << 12) == 3933)
+        && (hash_low % (1 << 6) == 13 || hash_low % (1 << 6) == 61)) {
+        int tmp = tryMove(x - dx[dir], y - dy[dir], role);
+        if (tmp) {
+            return 2;
+        }
+    }
+
+    // 眠三
+    // ***??
+    // x**??
+    if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 981) {
+        return 1;
+    }
+    // *x*??
+    if (hash_low % (1 << 4) == 5 && hash_high % (1 << 8) == 245) {
+        return 1;
+    }
+    // **x??
+    if (hash_low % (1 << 6) == 21 && hash_high % (1 << 6) == 61) {
+        return 1;
+    }
+
+    // ??***
+    // ??x**
+    if (hash_low % (1 << 6) == 61 && hash_high % (1 << 6) == 21) {
+        return 1;
+    }
+    // ??*x*
+    if (hash_low % (1 << 8) == 245 && hash_high % (1 << 4) == 5) {
+        return 1;
+    }
+    // ??**x
+    if (hash_low % (1 << 10) == 981 && hash_high % (1 << 2) == 1) {
+        return 1;
+    }
+
+    // **?*?
+    // x*?*?
+    if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 885) {
+        return 1;
+    }
+    // *x?*?
+    if (hash_low % (1 << 4) == 5 && hash_high % (1 << 8) == 221) {
+        return 1;
+    }
+    // **?x?
+    if (hash_low % (1 << 8) == 93 && hash_high % (1 << 4) == 13) {
+        return 1;
+    }
+
+    // ?*?**
+    // ?x?**
+    if (hash_low % (1 << 4) == 13 && hash_high % (1 << 8) == 93) {
+        return 1;
+    }
+    // ?*?x*
+    if (hash_low % (1 << 8) == 221 && hash_high % (1 << 4) == 5) {
+        return 1;
+    }
+    // ?*?*x
+    if (hash_low % (1 << 10) == 885 && hash_high % (1 << 2) == 1) {
+        return 1;
+    }
+
+    // *?**?
+    // x?**?
+    if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 861) {
+        return 1;
+    }
+    // *?x*?
+    if (hash_low % (1 << 6) == 29 && hash_high % (1 << 6) == 53) {
+        return 1;
+    }
+    // *?*x?
+    if (hash_low % (1 << 8) == 117 && hash_high % (1 << 4) == 13) {
+        return 1;
+    }
+
+    // ?**?*
+    // ?x*?*
+    if (hash_low % (1 << 4) == 13 && hash_high % (1 << 8) == 117) {
+        return 1;
+    }
+    // ?*x?*
+    if (hash_low % (1 << 6) == 53 && hash_high % (1 << 6) == 29) {
+        return 1;
+    }
+    // ?**?x
+    if (hash_low % (1 << 10) == 861 && hash_high % (1 << 2) == 1) {
+        return 1;
+    }
+
+    // ?***?
+    // ?x**?
+    if (hash_low % (1 << 4) == 13 && hash_high % (1 << 8) == 213) {
+        return 1;
+    }
+    // ?*x*?
+    if (hash_low % (1 << 6) == 53 && hash_high % (1 << 6) == 53) {
+        return 1;
+    }
+    // ?**x?
+    if (hash_low % (1 << 8) == 213 && hash_high % (1 << 4) == 13) {
+        return 1;
+    }
+
+    // **??*
+    // x*??*
+    if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 501) {
+        return 1;
+    }
+    // *x??*
+    if (hash_low % (1 << 4) == 5 && hash_high % (1 << 8) == 125) {
+        return 1;
+    }
+    // **??x
+    if (hash_low % (1 << 10) == 381 && hash_high % (1 << 2) == 1) {
+        return 1;
+    }
+
+    // *??**
+    // x??**
+    if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 381) {
+        return 1;
+    }
+    // *??x*
+    if (hash_low % (1 << 8) == 125 && hash_high % (1 << 4) == 5) {
+        return 1;
+    }
+    // *??*x
+    if (hash_low % (1 << 10) == 501 && hash_high % (1 << 2) == 1) {
+        return 1;
+    }
+
+    // *?*?*
+    // x?*?*
+    if (hash_low % (1 << 2) == 1 && hash_high % (1 << 10) == 477) {
+        return 1;
+    }
+    // *?x?*
+    if (hash_low % (1 << 6) == 29 && hash_high % (1 << 6) == 29) {
+        return 1;
+    }
+    // *?*?x
+    if (hash_low % (1 << 10) == 477 && hash_high % (1 << 2) == 1) {
+        return 1;
+    }
+    return 0;
+}
+
+
+/* // private
+// checkPatternThree: check pattern of three
+// return 0 for no three, 1 for 1 THREE_B, 2 for THREE, 3 for double THREE_B
+int checkPatternThreeOld(int x, int y, int dir, int hash_low, int hash_high) {
+    int role = getColor(x, y);
+    if (role == WALL) {
+        printf("\e[43m\e[30m error - checkPatternThree getColor: not in board\e[0m \n");
+        return 0;
+    }
     // ?***?
     // ?x**?
     if (hash_low % (1 << 2) == 1 && hash_high % (1 << 6) == 21) {
@@ -508,7 +774,7 @@ int checkPatternThree(int x, int y, int dir, int hash_low, int hash_high) {
     }
 
     return 0;
-}
+}*/
 
 /*
 // private

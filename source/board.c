@@ -22,6 +22,7 @@ void boardInit(void) {
             gobang_board[i][j].y = j;
         }
     }
+    cnt_stone = 0;
 }
 
 // public 
@@ -44,10 +45,10 @@ int roleReverse(int role) {
 // public 
 // inBoard: check whether the coordinate is in the board
 int inBoard(int x, int y) {
-    if (x < 1 || x > BOARD_WIDTH || y < 1 || y > BOARD_WIDTH) {
-        return 0;
+    if (x >= 1 && x <= BOARD_WIDTH && y >= 1 && y <= BOARD_WIDTH) {
+        return 1;
     }
-    return 1;
+    return 0;
 }
 
 // public
@@ -173,7 +174,7 @@ void printBoard(void) {
 // placeStone: place a stone at (x, y) of color
 void placeStone(int x, int y, int color) {
     // printf("====placeStone=========%c%d.\n", y + 'A' - 1, x);
-    if (x < 1 || x > 15 || y < 1 || y > 15) {
+    if (!inBoard(x, y)) {
         return;
     }
     if (gobang_board[x][y].color == NOSTONE) {

@@ -7,7 +7,7 @@
 #include "board.h"
 #include "analysis.h"
 
-#define DFS_MAX_DEPTH 2
+#define DFS_MAX_DEPTH 4
 
 #define MAX_SCORE 100000000
 
@@ -71,30 +71,44 @@ int AIDfs(int depth, int role, int * p_next_xx, int * p_next_yy, int alpha, int 
     int sequence_cnt = genSearchSequence(sequence_x, sequence_y);
 
     int mx_score = -MAX_SCORE;
-    int mx_id;
+    int mx_id = 0;
 
     int role_2 = roleReverse(role);
     
     int analysis_result[MAX_KIND];
 
     for (int i = 0; i < sequence_cnt; i++) {
+        if (getColor(sequence_x[i], sequence_y[i]) != NOSTONE) {
+            // printf("\e[43m\e[30m try to place a bad stone %d \e[0m \n", getColor(sequence_x[i], sequence_y[i]));
+            continue;
+        }
         placeStone(sequence_x[i], sequence_y[i], role); 
 
         memset(analysis_result, 0, sizeof(analysis_result));
+        // printf("\e[43m\e[30m in analysisPoint %d \e[0m \n", depth);
         analysisPoint(analysis_result, sequence_x[i], sequence_y[i]);
-
+        // printf("\e[43m\e[30m out analysisPoint %d \e[0m \n", depth);
 
         if (checkWin(analysis_result, role)) {
+            // if (getLastX() != sequence_x[i] || getLastY() != sequence_y[i]) {
+            //     printf("\e[43m\e[30m remove a not placed stone \e[0m \n");
+            // }
             removeLastStone();
             mx_score = MAX_SCORE;
             mx_id = i;
             break;
         } else if (checkForbiddenMove(analysis_result, role)) {
+            // if (getLastX() != sequence_x[i] || getLastY() != sequence_y[i]) {
+            //     printf("\e[43m\e[30m remove a not placed stone \e[0m \n");
+            // }
             removeLastStone();
             continue;
         } else {
             int nx, ny;
             int tmp = -AIDfs(depth + 1, role_2, &nx, &ny, -beta, -alpha);
+            // if (getLastX() != sequence_x[i] || getLastY() != sequence_y[i]) {
+            //     printf("\e[43m\e[30m remove a not placed stone \e[0m \n");
+            // }
             removeLastStone();
             if (tmp > mx_score) {
                 mx_score = tmp;
@@ -175,12 +189,18 @@ int genSearchSequence(int sequence_x[], int sequence_y[]) {
     int last_x = getLastX();
     int last_y = getLastY();
 
+    if (!inBoard(last_x, last_y)) {
+        printf("\e[42m\e[30m out of board in genSearchSequence \e[0m\n");
+        return 0;
+    }
+
     for (int i = -3; i <= 3; i++) {
         for (int j = -3; j <= 3; j++) {
-            if (getColor(last_x + i, last_y +j) == NOSTONE) {
+            if (getColor(last_x + i, last_y + j) == NOSTONE) {
                 sequence_x[cnt] = last_x + i;
                 sequence_y[cnt] = last_y + j;
                 cnt ++;
+                // printf("\e[42m\e[30m cnt of sequence %d \e[0m\n", cnt);
             }
         }
     }
