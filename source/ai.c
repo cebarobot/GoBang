@@ -7,7 +7,7 @@
 #include "board.h"
 #include "analysis.h"
 
-#define DFS_MAX_DEPTH 4
+#define DFS_MAX_DEPTH 3
 
 #define MAX_SCORE 100000000
 
@@ -194,8 +194,8 @@ int genSearchSequence(int sequence_x[], int sequence_y[]) {
         return 0;
     }
 
-    for (int i = -3; i <= 3; i++) {
-        for (int j = -3; j <= 3; j++) {
+    for (int i = -5; i <= 5; i++) {
+        for (int j = -5; j <= 5; j++) {
             if (getColor(last_x + i, last_y + j) == NOSTONE) {
                 sequence_x[cnt] = last_x + i;
                 sequence_y[cnt] = last_y + j;
