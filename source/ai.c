@@ -7,7 +7,8 @@
 #include "board.h"
 #include "analysis.h"
 
-#define DFS_MAX_DEPTH 3
+#define DFS_MAX_DEPTH 2
+// int DFS_MAX_DEPTH = 2;
 
 #define MAX_SCORE 100000000
 
